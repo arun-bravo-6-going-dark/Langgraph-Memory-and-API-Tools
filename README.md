@@ -76,13 +76,11 @@ The agent integrates long-term and short-term memories using PostgreSQL. Ensure 
 - **Uvicorn**
 - **Pydantic**
 - **PostgreSQL**
-- **LangChain** (for AI agent integration)
+- **LangChain** 
+- **Langgraph**
 
 ### Install Requirements
-Run the following command to install dependencies:
-```bash
-pip install fastapi uvicorn pydantic psycopg2 langchain
-```
+Install the dependencies using pip install
 
 ---
 
