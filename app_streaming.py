@@ -26,6 +26,7 @@ from langchain_postgres import PGVector
 from langchain_postgres.vectorstores import PGVector
 import prompts_file
 
+#Initialize Embedding Model
 model_name = "BAAI/bge-small-en"
 model_kwargs = {"device": "cpu"}
 encode_kwargs = {"normalize_embeddings": True}
@@ -33,6 +34,7 @@ hf = HuggingFaceBgeEmbeddings(
     model_name=model_name, model_kwargs=model_kwargs, encode_kwargs=encode_kwargs
 )
 
+#Create a vector store for storing Longterm Memory
 recall_vector_store = PGVector(
     embeddings=hf,
     collection_name="long_term_memory",
@@ -43,7 +45,7 @@ app = FastAPI(
     title="Inventory Management Chapt API", 
 )
 
-# FastAPI server base URL
+# FastAPI server base URL for Inventory Management API
 API_BASE_URL = "http://127.0.0.1:8000/api/products"
 
 class InputPayload(BaseModel):
@@ -58,6 +60,7 @@ def get_user_id(config: RunnableConfig) -> str:
 
     return user_id
 
+#Tools Initialization
 @tool
 def save_recall_memory(memory: str, config: RunnableConfig) -> str:
     """Save memory to vectorstore for later semantic retrieval."""
@@ -224,10 +227,12 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
+#Model Initialization
 model_with_tools = ChatOpenAI(model="gpt-4o-mini", api_key=os.environ['OPENAI_API_KEY'], temperature=0, top_p=0.5).bind_tools(tools)
 
 tokenizer = tiktoken.encoding_for_model("gpt-4o-mini")
 
+#Defining Nodes
 def agent(state: State) -> State:
     """Process the current state and generate a response using the LLM.
 
@@ -286,7 +291,8 @@ def route_tools(state: State):
 
     return END
 
-#Presrequisites: brew update -> brew install postgres -> brew services start postgresql -> psql postgres -> CREATE DATABASE my_database; -> CREATE USER my_user WITH PASSWORD 'my_password'; -> GRANT ALL PRIVILEGES ON DATABASE my_database TO my_user; -> \q
+#PostgresDB Connection for Short Term Memory
+#Presrequisites for local postgres: brew update -> brew install postgres -> brew services start postgresql -> psql postgres -> CREATE DATABASE my_database; -> CREATE USER my_user WITH PASSWORD 'my_password'; -> GRANT ALL PRIVILEGES ON DATABASE my_database TO my_user; -> \q
 DB_URI = DB_URI = "postgresql://my_user:my_password@localhost:5432/my_database?sslmode=disable"
 connection_kwargs = {
     "autocommit": True,
@@ -305,6 +311,7 @@ builder.add_edge("load_memories", "agent")
 builder.add_conditional_edges("agent", route_tools, ["tools", END])
 builder.add_edge("tools", "agent")
 
+#Token streaming
 def response_generator(user_message, user_id, thread_id):
     with ConnectionPool(
         conninfo=DB_URI,
