@@ -1,4 +1,23 @@
-#uvicorn dummy_get_put_app:app --host 127.0.0.1 --port 8000 --reload
+"""
+App Summary:
+This FastAPI application serves as a basic product inventory management system, simulating the creation, retrieval, updating, and listing of products. It is designed as a lightweight, in-memory RESTful API to test and demonstrate API tool integration, particularly for language model-based agents like LangChain or similar frameworks.
+
+Key Features:
+1. **Create Product**: Allows adding a new product to the inventory with attributes such as name, price, and quantity.
+2. **Update Product**: Supports partial updates to existing products using their unique ID.
+3. **Retrieve a Product**: Fetches detailed information about a specific product by its ID.
+4. **List Products**: Returns a list of all products in the inventory.
+5. **In-Memory Storage**: Products are stored in an in-memory dictionary for simplicity, making the app stateless and easy to reset.
+
+Intended Use:
+This app is ideal for testing API integrations and learning purposes. It provides clear, self-contained endpoints for CRUD operations while using FastAPI's robust features like Pydantic for data validation and automatic OpenAPI documentation generation.
+
+Note:
+Since this app uses in-memory storage (`products` dictionary), data will reset each time the application restarts. It's not intended for production use but rather for educational and testing purposes.
+
+
+Command to run the app: uvicorn dummy_get_put_app:app --host 127.0.0.1 --port 8000 --reload
+"""
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
