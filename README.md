@@ -1,4 +1,4 @@
-# Langgraph Memory and API Tools: Inventory Management 
+# Langgraph Memory and API Tools: Inventory Management with AI Agent
 
 ## Project Overview
 This project contains a FastAPI-based **Product Inventory Management System** and an **AI Agent** that interacts with the inventory API. The AI Agent uses tool calling to interact with the inventory and has the ability to store long-term and short-term memories in a PostgreSQL database.
